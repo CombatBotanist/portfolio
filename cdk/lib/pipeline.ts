@@ -11,24 +11,29 @@ export class PipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
+    const source = CodePipelineSource.gitHub(
+      'CombatBotanist/portfolio',
+      'main',
+      {
+        authentication: SecretValue.secretsManager(
+          'github/CombatBotanist/portfolio',
+        ),
+      },
+    );
+
+    const websiteBuild = new ShellStep('BuildWebsite', {
+      input: source,
+      primaryOutputDirectory: 'website/dist',
+      commands: ['n 24', 'cd website', 'npm ci', 'npm run build'],
+    });
+
     const pipeline = new CodePipeline(this, 'PortfolioCdkPipeline', {
       pipelineName: 'PortfolioPipeline',
       synth: new ShellStep('BuildCdk', {
-        input: CodePipelineSource.gitHub('CombatBotanist/portfolio', 'main', {
-          authentication: SecretValue.secretsManager(
-            'github/CombatBotanist/portfolio',
-          ),
-        }),
+        input: source,
+        additionalInputs: { 'website/dist': websiteBuild },
         primaryOutputDirectory: 'cdk/cdk.out',
-        commands: [
-          'cd website',
-          'npm ci',
-          'npm run build',
-          'cd ../cdk',
-          'npm ci',
-          'npm run build',
-          'npx cdk synth',
-        ],
+        commands: ['cd cdk', 'npm ci', 'npm run build', 'npx cdk synth'],
       }),
     });
 

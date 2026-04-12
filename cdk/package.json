@@ -16,6 +16,7 @@
     "singleQuote": true
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.11",
     "@types/jest": "^30",
     "@types/node": "^24.10.1",
     "aws-cdk": "2.1118.0",
