@@ -22,7 +22,7 @@ export class CertificateStack extends Stack {
     });
 
     this.certificate = new Certificate(this, 'WebsiteCertificate', {
-      domainName: props.websiteSubdomain + props.hostedZone.zoneName,
+      domainName: `${props.websiteSubdomain}.${props.hostedZone.zoneName}`,
       validation: CertificateValidation.fromDns(props.hostedZone),
     });
   }
