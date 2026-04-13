@@ -40,7 +40,7 @@ export class WebsiteStack extends Stack {
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
-    const fqdn = props.websiteSubdomain + props.hostedZone.zoneName;
+    const fqdn = `${props.websiteSubdomain}.${props.hostedZone.zoneName}`;
 
     const distribution = new Distribution(this, 'Distribution', {
       defaultBehavior: {
