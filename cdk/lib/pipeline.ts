@@ -34,6 +34,7 @@ export class PipelineStack extends Stack {
       }),
     });
 
+    // Dev
     pipeline.addStage(
       new DeployStage(this, 'Dev', {
         env: { account: '911967969946', region: 'us-west-2' },
