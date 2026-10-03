@@ -22,7 +22,7 @@ export class PipelineStack extends Stack {
         }),
         primaryOutputDirectory: 'cdk/cdk.out',
         commands: [
-          'n 24',
+          'n 26',
           'cd website',
           'npm i',
           'npm run build',
