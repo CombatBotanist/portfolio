@@ -1,6 +1,7 @@
 {
-  "name": "portfolio",
+  "name": "@portfolio/cdk",
   "version": "0.1.0",
+  "private": true,
   "bin": {
     "portfolio": "bin/app.js"
   },
@@ -8,24 +9,20 @@
     "clean": "rm -rf cdk.out dist",
     "build": "tsc",
     "watch": "tsc -w",
-    "synth": "npx cdk synth",
-    "test": "jest",
-    "cdk": "cdk"
-  },
-  "prettier": {
-    "singleQuote": true
-  },
-  "devDependencies": {
-    "@types/jest": "^30",
-    "@types/node": "^24.10.1",
-    "aws-cdk": "2.1144.0",
-    "jest": "^30",
-    "ts-jest": "^29",
-    "ts-node": "^10.9.2",
-    "typescript": "~5.9.3"
+    "synth": "npm run build && npx cdk synth",
+    "cdk": "cdk",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
   },
   "dependencies": {
     "aws-cdk-lib": "^2.272.0",
     "constructs": "^10.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "aws-cdk": "2.1144.0",
+    "typescript": "~7.0.2"
   }
 }

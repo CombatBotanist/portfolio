@@ -1,5 +1,5 @@
 {
-  "name": "portfolio",
+  "name": "@portfolio/website",
   "private": true,
   "type": "module",
   "imports": {
@@ -9,7 +9,11 @@
     "dev": "vite dev --port 3000",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
   },
   "dependencies": {
     "@tanstack/react-devtools": "^0.10.13",

@@ -1,204 +1,87 @@
-Welcome to your new TanStack Start app! 
+# Portfolio Website
 
-# Getting Started
+The React single-page application for the personal portfolio at
+`portfolio.jguy.net`. Built with [Vite](https://vite.dev/) and
+[TanStack Router](https://tanstack.com/router) using file-based routing.
 
-To run this application:
+This package produces the static assets in `dist/` that the `../cdk` package
+deploys to S3 + CloudFront.
+
+## Stack
+
+- [React 19](https://react.dev/)
+- [TanStack Router](https://tanstack.com/router) — file-based routing via the
+  router Vite plugin (code splitting enabled)
+- [Vite](https://vite.dev/) — dev server and bundler
+- [react95](https://react95.io/) + [styled-components](https://styled-components.com/)
+  for the UI
+
+This is a plain client-side SPA. There is no TanStack Start server runtime, no
+Tailwind, and no API/server functions.
+
+This is the `@portfolio/website` workspace of the monorepo.
+
+## Getting Started
+
+Install dependencies once from the repo root, then start the dev server here:
 
 ```bash
-npm install
-npm run dev
+npm install          # run in the repo root (portfolio/)
+npm run dev          # run in website/
 ```
 
-# Building For Production
+The dev server runs on [http://localhost:3000](http://localhost:3000).
 
-To build this application for production:
+## Scripts
 
 ```bash
-npm run build
+npm run dev           # start the Vite dev server on port 3000
+npm run build         # production build to dist/
+npm run preview       # preview the production build locally
+npm run test          # run the Vitest suite once
+npm run lint          # lint with oxlint
+npm run lint:fix      # lint and apply autofixes
+npm run format        # format with oxfmt
+npm run format:check  # check formatting without writing
 ```
-
-## Testing
-
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
-
-```bash
-npm run test
-```
-
-## Styling
-
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-### Removing Tailwind CSS
-
-If you prefer not to use Tailwind CSS:
-
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Uninstall the packages: `npm install @tailwindcss/vite tailwindcss -D`
 
 ## Linting & Formatting
 
-This project uses [Biome](https://biomejs.dev/) for linting and formatting. The following scripts are available:
-
-
-```bash
-npm run lint
-npm run format
-npm run check
-```
-
-
+Linting and formatting use the Oxc toolchain
+([oxlint](https://oxc.rs/docs/guide/usage/linter) +
+[oxfmt](https://oxc.rs/docs/guide/usage/formatter)), configured once at the repo
+root (`../.oxlintrc.json`, `../.oxfmtrc.json`) and normally run from there. This
+package's `.oxlintrc.json` extends the root baseline with the React/JSX plugins.
+The formatter uses single quotes for both JS and JSX, and the generated
+`src/routeTree.gen.ts` is excluded from both tools.
 
 ## Routing
 
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
+Routes are files in `src/routes/`. To add a route, add a file there — the
+TanStack Router plugin regenerates `src/routeTree.gen.ts` automatically.
 
-### Adding A Route
+- `src/routes/__root.tsx` is the root layout (renders `<Outlet />`).
+- Use `createFileRoute('/path')({ component })` for leaf routes.
+- Navigate between routes with the `Link` component from
+  `@tanstack/react-router`.
 
-To add a new route to your application just add a new file in the `./src/routes` directory.
+Do not hand-edit `src/routeTree.gen.ts`; it is generated.
 
-TanStack will automatically generate the content of the route file for you.
+## Project Layout
 
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
+```
+src/
+├── main.tsx            app entry — mounts RouterProvider on #app
+├── router.tsx          createRouter helper + router type registration
+├── routeTree.gen.ts    GENERATED — do not edit
+├── styles.css          global styles
+├── components/         shared components
+└── routes/             file-based routes
 ```
 
-Then anywhere in your JSX you can use it like so:
+## Notes
 
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'My App' },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
-})
-```
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Server Functions
-
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
-
-```tsx
-import { createServerFn } from '@tanstack/react-start'
-
-const getServerTime = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return new Date().toISOString()
-})
-
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState('')
-  
-  useEffect(() => {
-    getServerTime().then(setTime)
-  }, [])
-  
-  return <div>Server time: {time}</div>
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
-
-export const Route = createFileRoute('/api/hello')({
-  server: {
-    handlers: {
-      GET: () => json({ message: 'Hello, World!' }),
-    },
-  },
-})
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json()
-  },
-  component: PeopleComponent,
-})
-
-function PeopleComponent() {
-  const data = Route.useLoaderData()
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  )
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
+- TypeScript is strict; path aliases `#/*` and `@/*` both resolve to `./src/*`.
+- The app mounts into the `#app` element (see `index.html`).
+- A successful `npm run build` is required before the `cdk` package can deploy
+  updated content, since it ships `dist/`.

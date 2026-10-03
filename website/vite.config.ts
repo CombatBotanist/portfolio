@@ -5,11 +5,7 @@ import viteReact from '@vitejs/plugin-react';
 
 const config = defineConfig({
   resolve: { tsconfigPaths: true },
-  plugins: [
-    devtools(),
-    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
-    viteReact(),
-  ],
+  plugins: [devtools(), tanstackRouter({ target: 'react', autoCodeSplitting: true }), viteReact()],
 });
 
 export default config;

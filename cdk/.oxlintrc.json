@@ -1,0 +1,8 @@
+{
+  "$schema": "../node_modules/oxlint/configuration_schema.json",
+  "extends": ["../.oxlintrc.json"],
+  "plugins": ["typescript", "oxc", "import"],
+  "rules": {
+    "no-new": "off"
+  }
+}

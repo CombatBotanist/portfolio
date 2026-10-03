@@ -1,14 +1,9 @@
 import { Construct } from 'constructs';
 import { Duration, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib/core';
-import {
-  BlockPublicAccess,
-  Bucket,
-  BucketEncryption,
-} from 'aws-cdk-lib/aws-s3';
+import { BlockPublicAccess, Bucket, BucketEncryption } from 'aws-cdk-lib/aws-s3';
 import {
   Distribution,
   HttpVersion,
-  S3OriginAccessControl,
   SecurityPolicyProtocol,
   ViewerProtocolPolicy,
 } from 'aws-cdk-lib/aws-cloudfront';

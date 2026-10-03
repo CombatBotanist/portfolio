@@ -1,10 +1,7 @@
 import { Construct } from 'constructs';
 import { Stack, StackProps } from 'aws-cdk-lib/core';
 import { IHostedZone } from 'aws-cdk-lib/aws-route53';
-import {
-  Certificate,
-  CertificateValidation,
-} from 'aws-cdk-lib/aws-certificatemanager';
+import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 
 interface CertificateStackProps extends StackProps {
   readonly stage: string;
